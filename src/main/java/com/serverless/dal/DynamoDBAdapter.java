@@ -1,6 +1,16 @@
 package com.serverless.dal;
 
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig;
+
 public class DynamoDBAdapter {
+	
+    private static DynamoDBAdapter db_adapter = null;
+    private final AmazonDynamoDB client;
+    private DynamoDBMapper mapper;
 
     private DynamoDBAdapter() {
         this.client = AmazonDynamoDBClientBuilder.standard()
@@ -13,11 +23,14 @@ public class DynamoDBAdapter {
 
         return db_adapter;
     }
-    ...
     public DynamoDBMapper createDbMapper(DynamoDBMapperConfig mapperConfig) {
         if (this.client != null)
             mapper = new DynamoDBMapper(this.client, mapperConfig);
 
         return this.mapper;
+    }
+    
+    public AmazonDynamoDB getDbClient() {
+        return this.client;
     }
 }

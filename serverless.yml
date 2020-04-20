@@ -55,12 +55,28 @@ package:
 functions:
   listProducts:
     handler: com.serverless.ListProductsHandler
+    events:
+      - http:
+          path: /products
+          method: get
   getProduct:
-    handler: com.serverless.ListProductsHandler
+    handler: com.serverless.GetProductHandler
+    events:
+      - http:
+          path: /products/{id}
+          method: get
   createProduct:
-    handler: com.serverless.ListProductsHandler
+    handler: com.serverless.CreateProductHandler
+    events:
+      - http:
+          path: /products
+          method: post
   deleteProduct:
-    handler: com.serverless.ListProductsHandler
+    handler: com.serverless.DeleteProductHandler
+    events:
+      - http:
+          path: /products/{id}
+          method: delete
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
