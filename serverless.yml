@@ -25,7 +25,7 @@ provider:
   runtime: java8
 
 # you can overwrite defaults here
-#  stage: dev
+  stage: dev
 #  region: us-east-1
 
 # you can add statements to the Lambda function's IAM Role here
@@ -50,11 +50,17 @@ provider:
 
 # you can add packaging information here
 package:
-  artifact: target/hello-dev.jar
+  artifact: target/{self:service}-{self:provider.stage}.jar
 
 functions:
-  hello:
-    handler: com.serverless.Handler
+  listProducts:
+    handler: com.serverless.ListProductsHandler
+  getProduct:
+    handler: com.serverless.ListProductsHandler
+  createProduct:
+    handler: com.serverless.ListProductsHandler
+  deleteProduct:
+    handler: com.serverless.ListProductsHandler
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
@@ -106,3 +112,22 @@ functions:
 #     NewOutput:
 #       Description: "Description for the output"
 #       Value: "Some output value"
+resources:
+  Resources:
+    productsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: products_table
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+          - AttributeName: name
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+          - AttributeName: name
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
